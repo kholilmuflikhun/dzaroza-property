@@ -53,14 +53,21 @@ jobs:
           set -euo pipefail
           SOURCE="$RUNNER_TEMP/legacy/apps/marketing"
           source_count="$(find "$SOURCE" -type f | wc -l | tr -d ' ')"
-          target_count="$(find . -path './.git' -prune -o -path './docs' -prune -o -path './README.md' -prune -o -type f -print | wc -l | tr -d ' ')"
+          target_count="$(find . -path './.git' -prune -o -path './.github' -prune -o -path './docs' -prune -o -path './README.md' -prune -o -type f -print | wc -l | tr -d ' ')"
           test "$source_count" = "141"
           test "$target_count" = "140"
           (cd "$SOURCE" && find . -type f ! -name README.md -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/source.sha256"
-          (find . -path './.git' -prune -o -path './docs' -prune -o -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/target.sha256"
+          (find . -path './.git' -prune -o -path './.github' -prune -o -path './docs' -prune -o -path './README.md' -prune -o -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/target.sha256"
           diff -u "$RUNNER_TEMP/source.sha256" "$RUNNER_TEMP/target.sha256"
           echo "Verified source files: $source_count (README retained separately under docs/)"
           echo "Verified copied files: $target_count"
+
+      - name: Generate independent website lockfile
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare pnpm@10.18.0 --activate
+          pnpm install --lockfile-only
 
       - name: Commit imported source to migration branch
         run: |
