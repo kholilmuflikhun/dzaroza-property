@@ -1,0 +1,75 @@
+name: Phase 0.4 — Import Website Snapshot
+
+on:
+  push:
+    branches:
+      - feat/phase-0-source-preservation
+    paths:
+      - .github/workflows/phase-0.4-website-import.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: phase-0-4-website-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout target feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/phase-0-source-preservation
+          fetch-depth: 0
+
+      - name: Fetch pinned legacy website snapshot
+        env:
+          SOURCE_COMMIT: 6701d6e0018990622ee2a24650f0e26e535f395b
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout https://github.com/kholilmuflikhun/dzarozaproperty.git "$RUNNER_TEMP/legacy"
+          git -C "$RUNNER_TEMP/legacy" sparse-checkout init --cone
+          git -C "$RUNNER_TEMP/legacy" sparse-checkout set apps/marketing
+          git -C "$RUNNER_TEMP/legacy" fetch --depth=1 origin "$SOURCE_COMMIT"
+          git -C "$RUNNER_TEMP/legacy" checkout --detach "$SOURCE_COMMIT"
+          test "$(git -C "$RUNNER_TEMP/legacy" rev-parse HEAD)" = "$SOURCE_COMMIT"
+
+      - name: Import application and preserve target documentation
+        run: |
+          set -euo pipefail
+          SOURCE="$RUNNER_TEMP/legacy/apps/marketing"
+          test -f "$SOURCE/package.json"
+          test -f "$SOURCE/app/page.tsx"
+          mkdir -p docs
+          cp "$SOURCE/README.md" docs/LEGACY-WEBSITE-README.md
+          rsync -a --exclude='README.md' "$SOURCE/" ./
+
+      - name: Verify imported snapshot integrity
+        run: |
+          set -euo pipefail
+          SOURCE="$RUNNER_TEMP/legacy/apps/marketing"
+          source_count="$(find "$SOURCE" -type f | wc -l | tr -d ' ')"
+          target_count="$(find . -path './.git' -prune -o -path './docs' -prune -o -type f -print | wc -l | tr -d ' ')"
+          test "$source_count" = "141"
+          test "$target_count" = "140"
+          (cd "$SOURCE" && find . -type f ! -name README.md -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/source.sha256"
+          (find . -path './.git' -prune -o -path './docs' -prune -o -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/target.sha256"
+          diff -u "$RUNNER_TEMP/source.sha256" "$RUNNER_TEMP/target.sha256"
+          echo "Verified source files: $source_count (README retained separately under docs/)"
+          echo "Verified copied files: $target_count"
+
+      - name: Commit imported source to migration branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No source changes to commit."
+            exit 0
+          fi
+          git commit -m "feat(phase-0.4): import pinned website source and original assets"
+          git push origin HEAD:feat/phase-0-source-preservation
