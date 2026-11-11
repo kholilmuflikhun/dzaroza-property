@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- custom carousel and modal surfaces support pointer gestures and keyboard navigation */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -74,7 +76,6 @@ export default function Products() {
         />
 
         <div className="relative mt-10 sm:mt-12">
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- carousel supports custom pointer and keyboard navigation
           <div
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
