@@ -78,7 +78,7 @@ export default function Products() {
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             onPointerCancel={() => { swipeStart.current = null; }}
-            role="region"
+            role="application"
             aria-label="Carousel produk digital"
             aria-roledescription="carousel"
             tabIndex={0}
