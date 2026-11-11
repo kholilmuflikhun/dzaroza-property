@@ -62,6 +62,13 @@ jobs:
           echo "Verified source files: $source_count (README retained separately under docs/)"
           echo "Verified copied files: $target_count"
 
+      - name: Generate independent website lockfile
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare pnpm@10.18.0 --activate
+          pnpm install --lockfile-only
+
       - name: Commit imported source to migration branch
         run: |
           set -euo pipefail
