@@ -1,4 +1,4 @@
-name: Phase 0.5 Website Quality Gates
+name: Phase 0.6 Website Security & Release Readiness
 on:
   push:
     branches: [feat/phase-0-source-preservation]
