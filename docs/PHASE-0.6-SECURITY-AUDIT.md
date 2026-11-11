@@ -30,7 +30,7 @@
 
 ## CI gates
 
-The Website workflow runs frozen dependency installation, TypeScript, ESLint, unit tests, and a production build without deployment. The latest code checkpoint is being revalidated after the testimonial identity hardening.
+The Website workflow runs frozen dependency installation, TypeScript, ESLint, unit tests, and a production build without deployment. The latest verified code checkpoint passed all gates: **3 test files, 16 tests passed**, plus TypeScript, ESLint, and production build.
 
 ## Remaining validation
 
