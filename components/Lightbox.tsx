@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- custom carousel and modal surfaces support pointer gestures and keyboard navigation */
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -96,7 +98,6 @@ export default function Lightbox({ images, alt, title, subtitle, onClose }: Prop
   }
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- backdrop closes the modal on pointer interaction
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-charcoal-950/90 p-4 sm:p-8"
       onPointerDown={(event) => {
@@ -126,8 +127,6 @@ export default function Lightbox({ images, alt, title, subtitle, onClose }: Prop
             {index + 1} / {images.length}
           </span>
         )}
-
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- carousel supports custom pointer and keyboard navigation
         <div
           className="relative aspect-[4/3] w-full touch-pan-y select-none bg-charcoal-950"
           onPointerDown={handlePointerDown}
