@@ -98,7 +98,7 @@ export default function Portfolio() {
               event.preventDefault();
               event.stopPropagation();
             }}
-            role="region"
+            role="application"
             aria-label="Carousel portofolio proyek"
             aria-roledescription="carousel"
             tabIndex={0}
