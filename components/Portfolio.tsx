@@ -88,6 +88,7 @@ export default function Portfolio() {
         </div>
 
         <div className="relative mt-9 sm:mt-12">
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- carousel supports custom pointer and keyboard navigation
           <div
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
