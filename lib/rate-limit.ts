@@ -14,11 +14,14 @@ type RateLimitOptions = {
 };
 
 export function getClientAddress(request: Request) {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
+  // Prefer single-hop headers set by the trusted edge/proxy. The left-most
+  // X-Forwarded-For value can be supplied by the caller and is spoofable.
+  const trustedAddress = (
+    request.headers.get("cf-connecting-ip")
+    || request.headers.get("x-real-ip")
+    || ""
+  ).trim();
+  return trustedAddress && trustedAddress.length <= 64 ? trustedAddress : "unknown";
 }
 
 export async function checkRateLimit(
