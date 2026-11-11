@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { getSheetsClient, getTestimonials } from "@/lib/testimonials.server";
 import { checkRateLimit, cleanupRateLimitEntries, getClientAddress } from "@/lib/rate-limit";
+import { isRedisConfigured } from "@/lib/redis";
 
 // ---------------------------------------------------------------------------
 // app/api/testimoni/route.ts
@@ -34,8 +37,16 @@ const MAX_LENGTHS = {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    const verifiedEmail = session?.user?.email?.trim().toLowerCase();
+    if (!verifiedEmail) {
+      return NextResponse.json({ success: false, message: "Login Google diperlukan untuk mengirim testimoni." }, { status: 401 });
+    }
+    if (process.env.NODE_ENV === "production" && !isRedisConfigured()) {
+      return NextResponse.json({ success: false, message: "Rate limit global belum dikonfigurasi." }, { status: 503 });
+    }
     cleanupRateLimitEntries();
-    const rateLimit = await checkRateLimit(`testimoni:${getClientAddress(request)}`, {
+    const rateLimit = await checkRateLimit(`testimoni:${verifiedEmail}:${getClientAddress(request)}`, {
       limit: 3,
       windowMs: 60 * 60 * 1000,
     });
@@ -77,6 +88,10 @@ export async function POST(request: NextRequest) {
 
     // Batasi panjang tiap field — mencegah payload raksasa membebani Google
     // Sheets API atau memenuhi tampilan testimoni dengan teks tak wajar.
+    if (email.trim().toLowerCase() !== verifiedEmail) {
+      return NextResponse.json({ success: false, message: "Email testimoni harus sesuai dengan akun Google yang login." }, { status: 403 });
+    }
+
     if (
       name.length > MAX_LENGTHS.name ||
       email.length > MAX_LENGTHS.email ||
@@ -135,13 +150,15 @@ export async function POST(request: NextRequest) {
         values: [
           [
             new Date().toISOString(),
-            sanitizeCell(name),
-            sanitizeCell(email),
+            sanitizeCell(session.user?.name?.trim() || name),
+            sanitizeCell(verifiedEmail),
             sanitizeCell(phone),
             sanitizeCell(address),
             String(rating),
             sanitizeCell(message),
-            photo ? sanitizeCell(String(photo)) : "",
+            session.user?.image && isAllowedPhotoUrl(session.user.image)
+              ? sanitizeCell(session.user.image)
+              : photo ? sanitizeCell(String(photo)) : "",
           ],
         ],
       },
