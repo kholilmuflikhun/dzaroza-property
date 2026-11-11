@@ -149,7 +149,7 @@ export default function TeamSection() {
       <div className="relative">
         <div
           key={safePage}
-          role="region"
+          role="application"
           aria-label="Carousel anggota tim"
           aria-roledescription="carousel"
           aria-live="polite"
