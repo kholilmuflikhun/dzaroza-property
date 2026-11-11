@@ -98,7 +98,9 @@ export default function Lightbox({ images, alt, title, subtitle, onClose }: Prop
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-charcoal-950/90 p-4 sm:p-8"
-      onClick={onClose}
+      onPointerDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
     >
       <div
         ref={dialogRef}
@@ -108,7 +110,6 @@ export default function Lightbox({ images, alt, title, subtitle, onClose }: Prop
         tabIndex={-1}
         onKeyDown={handleDialogKeyDown}
         className="relative max-w-2xl w-full overflow-hidden rounded-xl2 bg-white"
-        onClick={(e) => e.stopPropagation()}
       >
         <button
           ref={closeButtonRef}
@@ -130,7 +131,7 @@ export default function Lightbox({ images, alt, title, subtitle, onClose }: Prop
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
           onPointerCancel={() => { swipeStart.current = null; }}
-          role="region"
+          role="application"
           aria-label="Galeri foto"
           aria-roledescription="carousel"
           tabIndex={0}
