@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- custom carousel and modal surfaces support pointer gestures and keyboard navigation */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -147,7 +149,6 @@ export default function TeamSection() {
   return (
     <>
       <div className="relative">
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- carousel supports custom pointer and keyboard navigation
         <div
           key={safePage}
           role="application"
