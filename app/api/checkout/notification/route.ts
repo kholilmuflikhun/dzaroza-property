@@ -39,6 +39,9 @@ export async function POST(request: NextRequest) {
     if (!isRedisConfigured()) {
       return NextResponse.json({ success: false, message: "Order storage belum dikonfigurasi." }, { status: 503 });
     }
+    if (!process.env.MIDTRANS_SERVER_KEY) {
+      return NextResponse.json({ success: false, message: "Payment gateway belum dikonfigurasi." }, { status: 503 });
+    }
 
     const payload = await request.json();
     const { order_id, status_code, gross_amount, signature_key } = payload ?? {};
@@ -47,7 +50,12 @@ export async function POST(request: NextRequest) {
       typeof order_id !== "string" ||
       typeof status_code !== "string" ||
       typeof gross_amount !== "string" ||
-      typeof signature_key !== "string"
+      typeof signature_key !== "string" ||
+      typeof payload.transaction_status !== "string" ||
+      order_id.length < 1 || order_id.length > 128 ||
+      !/^\d{3}$/.test(status_code) ||
+      !/^\d+(?:\.\d{1,2})?$/.test(gross_amount) ||
+      !/^[a-f0-9]{128}$/i.test(signature_key)
     ) {
       return NextResponse.json({ success: false, message: "Payload tidak valid." }, { status: 400 });
     }
@@ -66,7 +74,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "Nominal transaksi tidak cocok." }, { status: 400 });
     }
 
-    const statusMap: Record<string, OrderStatus | undefined> = {
+    if (payload.transaction_status === "capture" && payload.fraud_status !== "accept") {
+      return NextResponse.json({ success: true, ignored: true });
+    }
+
+    const statusMap: Record<string, OrderStatus> = Object.assign(Object.create(null) as Record<string, OrderStatus>, {
       settlement: "paid",
       capture: "paid",
       pending: "pending",
@@ -74,12 +86,14 @@ export async function POST(request: NextRequest) {
       expire: "expired",
       cancel: "cancelled",
       failure: "failed",
-    };
+    });
+    if (!Object.hasOwn(statusMap, payload.transaction_status)) {
+      return NextResponse.json({ success: true, ignored: true });
+    }
     const nextStatus = statusMap[payload.transaction_status];
-    if (!nextStatus) return NextResponse.json({ success: true, ignored: true });
 
-    const isAlreadyPaid = order.status === "paid";
-    const shouldUpdate = !isAlreadyPaid || nextStatus === "paid";
+    // Never downgrade a terminal order because webhook deliveries can arrive out of order.
+    const shouldUpdate = order.status === "pending" || nextStatus === "paid";
     if (shouldUpdate) {
       await updateOrder(order_id, {
         status: nextStatus,
