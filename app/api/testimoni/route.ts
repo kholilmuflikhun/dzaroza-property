@@ -157,8 +157,8 @@ export async function POST(request: NextRequest) {
             sanitizeCell(address),
             String(rating),
             sanitizeCell(message),
-            authenticatedUser.image && isAllowedPhotoUrl(session.user.image)
-              ? sanitizeCell(session.user.image)
+            typeof authenticatedUser.image === "string" && isAllowedPhotoUrl(authenticatedUser.image)
+              ? sanitizeCell(authenticatedUser.image)
               : photo ? sanitizeCell(String(photo)) : "",
           ],
         ],
