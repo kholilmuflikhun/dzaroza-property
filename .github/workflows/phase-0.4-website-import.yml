@@ -57,7 +57,7 @@ jobs:
           test "$source_count" = "141"
           test "$target_count" = "140"
           (cd "$SOURCE" && find . -type f ! -name README.md -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/source.sha256"
-          (find . -path './.git' -prune -o -path './docs' -prune -o -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/target.sha256"
+          (find . -path './.git' -prune -o -path './.github' -prune -o -path './docs' -prune -o -path './README.md' -prune -o -type f -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/target.sha256"
           diff -u "$RUNNER_TEMP/source.sha256" "$RUNNER_TEMP/target.sha256"
           echo "Verified source files: $source_count (README retained separately under docs/)"
           echo "Verified copied files: $target_count"
