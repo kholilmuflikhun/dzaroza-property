@@ -148,7 +148,7 @@ export default function Testimonials() {
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerCancel}
             aria-live={paused || reducedMotion ? "polite" : "off"}
-            role="region"
+            role="application"
             aria-label="Carousel testimoni"
             aria-roledescription="carousel"
             tabIndex={0}
