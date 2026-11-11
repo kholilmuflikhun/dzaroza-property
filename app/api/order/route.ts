@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSheetsClient } from "@/lib/testimonials.server";
 import { checkRateLimit, cleanupRateLimitEntries, getClientAddress } from "@/lib/rate-limit";
+import { isRedisConfigured } from "@/lib/redis";
 import { orderFormFields, orderPhotoFields } from "@/lib/orderForm";
 import { services } from "@/lib/data";
 
@@ -188,6 +189,12 @@ function buildLocationLine(location: unknown): ValidationResult<{ line?: string 
 
 export async function POST(request: NextRequest) {
   try {
+    if (process.env.NODE_ENV === "production" && !isRedisConfigured()) {
+      return NextResponse.json(
+        { success: false, message: "Rate limit global belum dikonfigurasi." },
+        { status: 503 },
+      );
+    }
     cleanupRateLimitEntries();
     const rateLimit = await checkRateLimit(`order:${getClientAddress(request)}`, {
       limit: 3,
