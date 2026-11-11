@@ -38,8 +38,9 @@ const MAX_LENGTHS = {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    const verifiedEmail = session?.user?.email?.trim().toLowerCase();
-    if (!verifiedEmail) {
+    const authenticatedUser = session?.user;
+    const verifiedEmail = authenticatedUser?.email?.trim().toLowerCase();
+    if (!authenticatedUser || !verifiedEmail) {
       return NextResponse.json({ success: false, message: "Login Google diperlukan untuk mengirim testimoni." }, { status: 401 });
     }
     if (process.env.NODE_ENV === "production" && !isRedisConfigured()) {
@@ -150,13 +151,13 @@ export async function POST(request: NextRequest) {
         values: [
           [
             new Date().toISOString(),
-            sanitizeCell(session.user?.name?.trim() || name),
+            sanitizeCell(authenticatedUser.name?.trim() || name),
             sanitizeCell(verifiedEmail),
             sanitizeCell(phone),
             sanitizeCell(address),
             String(rating),
             sanitizeCell(message),
-            session.user?.image && isAllowedPhotoUrl(session.user.image)
+            authenticatedUser.image && isAllowedPhotoUrl(session.user.image)
               ? sanitizeCell(session.user.image)
               : photo ? sanitizeCell(String(photo)) : "",
           ],
