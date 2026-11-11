@@ -1,6 +1,7 @@
 name: Phase 0.4 — Import Website Snapshot
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - feat/phase-0-source-preservation
@@ -52,7 +53,7 @@ jobs:
           set -euo pipefail
           SOURCE="$RUNNER_TEMP/legacy/apps/marketing"
           source_count="$(find "$SOURCE" -type f | wc -l | tr -d ' ')"
-          target_count="$(find . -path './.git' -prune -o -path './docs' -prune -o -type f -print | wc -l | tr -d ' ')"
+          target_count="$(find . -path './.git' -prune -o -path './docs' -prune -o -path './README.md' -prune -o -type f -print | wc -l | tr -d ' ')"
           test "$source_count" = "141"
           test "$target_count" = "140"
           (cd "$SOURCE" && find . -type f ! -name README.md -print0 | sort -z | xargs -0 sha256sum) > "$RUNNER_TEMP/source.sha256"
