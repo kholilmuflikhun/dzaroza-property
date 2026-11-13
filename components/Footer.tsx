@@ -46,7 +46,7 @@ export default function Footer() {
           <li><a href="#layanan" className="hover:text-orange-400">Layanan Jasa</a></li>
           <li><a href="#portofolio" className="hover:text-orange-400">Portofolio</a></li>
           <li><a href="#testimoni" className="hover:text-orange-400">Testimoni</a></li>
-          <li><a href="#profil" className="hover:text-orange-400">Company Profile</a></li>
+          <li><a href="#profil" className="hover:text-orange-400">Tentang Kami</a></li>
           <li><a href="#faq" className="hover:text-orange-400">FAQ</a></li>
         </ul>
       </div>
