@@ -13,6 +13,7 @@ Refine the public V4.0 experience while preserving the imported V3.0 application
 - Added visible keyboard focus treatment to the mobile primary CTA.
 - Restyled per-service consultation actions as high-contrast orange CTAs with visible keyboard focus.
 - Added a keyboard-accessible skip link and a focusable `main#main-content` landmark.
+- Localized the Company Profile navigation label to `Tentang Kami` in the header and footer for consistent Indonesian-language navigation.
 - Added this feature branch to the website quality-gate workflow.
 
 ## Preserved
