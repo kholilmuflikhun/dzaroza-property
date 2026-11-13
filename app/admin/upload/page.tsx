@@ -71,8 +71,9 @@ export default function AdminUploadPage() {
 
         <form onSubmit={handleUpload} className="mt-6 space-y-4">
           <div>
-            <label className="text-xs font-semibold text-charcoal-600">Secret Upload</label>
+            <label htmlFor="upload-secret" className="text-xs font-semibold text-charcoal-600">Secret Upload</label>
             <input
+              id="upload-secret"
               type="password"
               required
               value={password}
@@ -83,8 +84,9 @@ export default function AdminUploadPage() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-charcoal-600">Pilih File (foto atau video)</label>
+            <label htmlFor="upload-file" className="text-xs font-semibold text-charcoal-600">Pilih File (foto atau video)</label>
             <input
+              id="upload-file"
               type="file"
               accept="image/*,video/*,application/pdf"
               required
