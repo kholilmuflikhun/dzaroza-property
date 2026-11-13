@@ -109,7 +109,7 @@ export default function Portfolio() {
               if (event.key === "ArrowLeft" && canPrev) { event.preventDefault(); setPage(safePage - 1); }
               if (event.key === "ArrowRight" && canNext) { event.preventDefault(); setPage(safePage + 1); }
             }}
-            className="grid animate-carousel-enter touch-pan-y select-none gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+            className="grid animate-carousel-enter touch-pan-y select-none gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-4"
           >
             {currentItems.map((project) => (
               <button
