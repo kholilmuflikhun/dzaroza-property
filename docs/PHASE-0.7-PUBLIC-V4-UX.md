@@ -3,30 +3,34 @@
 Status: implementation in progress; Draft PR; not merged.
 
 ## Objective
-Begin the V4.0 public website refinement while preserving the imported V3.0 application, original content, and original assets.
+Refine the public V4.0 experience while preserving the imported V3.0 application, original copy, product/service information, and original visual assets.
 
-## Changes
-- Standardized the primary orange token to `#F97316`, retaining black/charcoal and white as the core brand surfaces.
-- Shifted soft neutral backgrounds toward clean white/neutral gray rather than warm cream.
-- Updated desktop and mobile navbar primary CTA from product browsing to the service consultation section.
+## Implemented in this phase
+- Standardized the primary orange design token to `#F97316`, retaining black/charcoal and white as core brand surfaces.
+- Shifted soft backgrounds to neutral white/gray tones rather than warm cream.
+- Updated desktop and mobile primary navigation CTA to `Konsultasi Layanan`, pointing to the service section.
+- Added keyboard Escape dismissal for the mobile navigation panel.
+- Added visible keyboard focus treatment to the mobile primary CTA.
 - Restyled per-service consultation actions as high-contrast orange CTAs with visible keyboard focus.
+- Added a keyboard-accessible skip link and a focusable `main#main-content` landmark.
 - Added this feature branch to the website quality-gate workflow.
 
 ## Preserved
-- Existing Indonesian copy, service catalog, product data, portfolio, original logo and image assets.
-- Existing API routes, payment integration, testimonials, and public/private website boundary.
-- No database, DNS, production secrets, or Production deployment changes.
+- Existing Indonesian copy, service catalog, digital product information, portfolio, testimonials, team information, original logo and image assets.
+- Existing API routes, checkout and payment integration, order submission, testimonial flow, and public/private website boundary.
+- No database schema, DNS, Production secrets, or Production deployment changes.
 
 ## Validation
-- Existing Phase 0.6 CI checkpoint passed frozen install, TypeScript, ESLint, unit tests (3 files / 16 tests), and production build.
-- Existing Vercel staging deployment for the source branch is READY and reports a successful Next.js production build.
-- New Phase 0.7 changes require their own CI run before acceptance.
-- Responsive visual QA and interaction testing remain pending on the new Preview.
+- Parent Phase 0.6 CI passed frozen dependency installation, TypeScript, ESLint, unit tests, and production build.
+- Phase 0.7 CI runs for the first implementation commits passed frozen install, TypeScript, ESLint, unit tests, and production build.
+- Phase 0.7 Vercel staging Preview for the then-current branch head reached READY.
+- Latest changes (mobile CTA keyboard behavior and skip navigation) require a fresh CI and Preview run.
+- Automated CI does not replace responsive visual QA or keyboard/screen-reader interaction review.
 
-## Release gates still outstanding
-1. Complete V4.0 UX/content review across desktop, tablet, and mobile.
-2. Verify CTA, navigation, order, testimonial, product, and WhatsApp journeys.
-3. Verify staging integrations without live payment or production credentials.
-4. Verify original asset SHA-256 integrity against the pinned source commit; the legacy runbook still requires an authoritative checksum comparison.
+## Remaining release gates
+1. Complete visual QA across desktop, tablet, iPad, and mobile viewports.
+2. Verify navbar, anchor navigation, mobile menu, all service CTA, order wizard, product actions, portfolio lightbox, testimonials, FAQ, and WhatsApp journeys.
+3. Verify staging integrations without triggering live payments or using Production credentials.
+4. Verify original binary asset SHA-256 integrity against the pinned source commit; the migration runbook requires an authoritative checksum comparison.
 5. Complete SEO, accessibility, security, and performance checks.
 6. Obtain explicit approval before merging or any Production action.
