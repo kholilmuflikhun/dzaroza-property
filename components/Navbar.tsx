@@ -21,8 +21,15 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   function handleAnchorClick(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -67,8 +74,8 @@ export default function Navbar() {
                 <ArrowUpRight size={15} className="text-charcoal-400" />
               </a>
             ))}
-            <a href="#produk" onClick={(e) => handleAnchorClick(e, "#produk")} className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-charcoal-950">
-              Lihat Produk <ArrowUpRight size={16} />
+            <a href="#layanan" onClick={(e) => handleAnchorClick(e, "#layanan")} className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-charcoal-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2">
+              Konsultasi Layanan <ArrowUpRight size={16} />
             </a>
           </div>
         </div>
