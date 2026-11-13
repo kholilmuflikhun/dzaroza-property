@@ -25,7 +25,7 @@ function ProductSchema({ product }: { product: (typeof products)[number] }) {
       price: product.priceAmount,
       availability:
         product.status === "coming-soon"
-          ? "https://schema.org/PreOrder"
+          ? "https://schema.org/OutOfStock"
           : "https://schema.org/InStock",
     },
   };
@@ -33,7 +33,7 @@ function ProductSchema({ product }: { product: (typeof products)[number] }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }}
     />
   );
 }
