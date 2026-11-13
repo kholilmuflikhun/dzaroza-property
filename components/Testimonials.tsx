@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- custom carousel and modal surfaces support pointer gestures and keyboard navigation */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-static-element-interactions -- custom swipe carousel region also supports keyboard arrow navigation */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
