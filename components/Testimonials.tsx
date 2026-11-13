@@ -160,7 +160,7 @@ export default function Testimonials() {
               if (event.key === "ArrowLeft") { event.preventDefault(); goPrev(); }
               if (event.key === "ArrowRight") { event.preventDefault(); goNext(); }
             }}
-            className="grid animate-carousel-enter touch-pan-y select-none gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+            className="grid animate-carousel-enter touch-pan-y select-none gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-4"
           >
             {currentItems.map((t) => (
               <div key={t.id} className="rounded-xl2 border border-charcoal-100 bg-cream-soft p-6">
@@ -196,7 +196,7 @@ export default function Testimonials() {
               <button
                 onClick={goPrev}
                 aria-label="Testimoni sebelumnya"
-                className="absolute left-0 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-charcoal-100 bg-white shadow-card transition-colors hover:border-orange-400 lg:flex h-11 w-11"
+                className="absolute left-0 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-charcoal-100 bg-white shadow-card transition-colors hover:border-orange-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 lg:flex h-11 w-11"
               >
                 <ChevronLeft size={20} />
               </button>
@@ -229,7 +229,7 @@ export default function Testimonials() {
               type="button"
               onClick={goPrev}
               aria-label="Testimoni sebelumnya"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal-100 lg:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 lg:hidden"
             >
               <ChevronLeft size={16} />
             </button>
