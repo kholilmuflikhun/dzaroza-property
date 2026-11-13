@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { X, Clock } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
 
@@ -12,6 +12,10 @@ type Props = {
 
 export default function ComingSoonModal({ productTitle, releaseDate, onClose }: Props) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+  }, []);
 
   function handleDialogKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.key === "Escape") {
@@ -46,10 +50,7 @@ export default function ComingSoonModal({ productTitle, releaseDate, onClose }: 
         aria-labelledby="coming-soon-title"
         tabIndex={-1}
         onKeyDown={handleDialogKeyDown}
-        ref={(node) => {
-          if (node) closeButtonRef.current?.focus();
-        }}
-        className="relative w-full max-w-sm rounded-xl2 bg-white p-7 text-center"
+                className="relative w-full max-w-sm rounded-xl2 bg-white p-7 text-center"
       >
         <button
           ref={closeButtonRef}
