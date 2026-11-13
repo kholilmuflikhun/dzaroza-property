@@ -4,7 +4,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import TestimoniForm from "./TestimoniForm";
 import TestimoniStats from "./TestimoniStats";
@@ -41,6 +41,7 @@ export default function Testimonials() {
   const [items, setItems] = useState<Testimonial[]>([]);
   const [page, setPage] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [manualPaused, setManualPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   // Kartu per slide mengikuti jumlah kolom grid aktif (mobile 1, tablet 2,
   // desktop 4) supaya tampilan carousel konsisten dengan layout grid semula.
@@ -87,12 +88,12 @@ export default function Testimonials() {
 
   // Auto-slide hanya berjalan jika pengguna tidak meminta reduced motion.
   useEffect(() => {
-    if (pages.length <= 1 || paused || reducedMotion) return;
+    if (pages.length <= 1 || paused || manualPaused || reducedMotion) return;
     const timer = setInterval(() => {
       setPage((currentPage) => (currentPage + 1) % pages.length);
     }, AUTO_SLIDE_MS);
     return () => clearInterval(timer);
-  }, [pages.length, paused, reducedMotion]);
+  }, [pages.length, paused, manualPaused, reducedMotion]);
 
   const currentItems = pages[safePage] ?? [];
 
@@ -149,7 +150,7 @@ export default function Testimonials() {
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerCancel}
-            aria-live={paused || reducedMotion ? "polite" : "off"}
+            aria-live={paused || manualPaused || reducedMotion ? "polite" : "off"}
             role="application"
             aria-label="Carousel testimoni"
             aria-roledescription="carousel"
@@ -212,7 +213,20 @@ export default function Testimonials() {
 
         {pages.length > 1 && (
           <div className="mt-8 flex items-center justify-center gap-4">
+            {!reducedMotion && (
+              <button
+                type="button"
+                onClick={() => setManualPaused((value) => !value)}
+                aria-pressed={manualPaused}
+                aria-label={manualPaused ? "Lanjutkan perpindahan otomatis testimoni" : "Jeda perpindahan otomatis testimoni"}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-charcoal-100 px-3 text-xs font-semibold text-charcoal-700 transition-colors hover:border-orange-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+              >
+                {manualPaused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+                {manualPaused ? "Lanjutkan" : "Jeda"}
+              </button>
+            )}
             <button
+              type="button"
               onClick={goPrev}
               aria-label="Testimoni sebelumnya"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-charcoal-100 lg:hidden"
