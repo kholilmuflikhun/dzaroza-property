@@ -49,8 +49,8 @@ export default function Navbar() {
           ))}
         </div>
 
-        <a href="#produk" onClick={(e) => handleAnchorClick(e, "#produk")} className="ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-charcoal-950 shadow-card transition-all hover:-translate-y-0.5 hover:bg-orange-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 lg:inline-flex">
-          Lihat Produk <ArrowUpRight size={16} />
+        <a href="#layanan" onClick={(e) => handleAnchorClick(e, "#layanan")} className="ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-charcoal-950 shadow-card transition-all hover:-translate-y-0.5 hover:bg-orange-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 lg:inline-flex">
+          Konsultasi Layanan <ArrowUpRight size={16} />
         </a>
 
         <button type="button" aria-label={open ? "Tutup menu" : "Buka menu"} aria-expanded={open} aria-controls="mobile-primary-navigation" onClick={() => setOpen((value) => !value)} className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-charcoal-100 bg-white text-charcoal-950 transition-colors hover:border-orange-300 hover:text-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 xl:hidden">
