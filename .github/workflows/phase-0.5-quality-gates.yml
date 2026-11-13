@@ -1,7 +1,7 @@
 name: Phase 0.6 Website Security & Release Readiness
 on:
   push:
-    branches: [feat/phase-0-source-preservation]
+    branches: [feat/phase-0-source-preservation, feat/phase-0.7-public-v4-ux]
   pull_request:
     branches: [main]
   workflow_dispatch:
