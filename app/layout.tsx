@@ -46,8 +46,14 @@ export default function RootLayout({
       <body className="bg-white text-charcoal-950">
         <OrganizationSchema />
         <Providers>
+          <a
+            href="#main-content"
+            className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-charcoal-950 shadow-card focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+          >
+            Lewati ke konten utama
+          </a>
           <Navbar />
-          <main>{children}</main>
+          <main id="main-content" tabIndex={-1} className="outline-none">{children}</main>
           <Footer />
           <FloatingWhatsApp />
         </Providers>
