@@ -103,7 +103,7 @@ export default function PurchaseButton({
       <button
         onClick={handleClick}
         disabled={loading}
-        className={`inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold transition-colors disabled:opacity-70 ${
+        className={`inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold transition-colors disabled:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 ${
           isComingSoon
             ? "bg-charcoal-800 text-white hover:bg-charcoal-600"
             : "bg-orange-500 text-charcoal-950 hover:bg-orange-400"
@@ -120,7 +120,7 @@ export default function PurchaseButton({
       </button>
 
       {!isComingSoon && error && (
-        <p className="mt-2 text-xs text-red-600">
+        <p role="alert" className="mt-2 text-xs text-red-600">
           {error}{" "}
           <a href={waLink} target="_blank" rel="noopener noreferrer" className="underline hover:text-red-700">
             Atau pesan via WhatsApp.
