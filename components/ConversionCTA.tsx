@@ -1,5 +1,4 @@
-import { ArrowRight, MessageCircle, ShieldCheck } from "lucide-react";
-import SectionHeading from "./SectionHeading";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { primaryWhatsApp } from "@/lib/data";
 
