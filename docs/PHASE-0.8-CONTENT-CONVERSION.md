@@ -1,6 +1,6 @@
 # Phase 0.8 — Content & Conversion
 
-Status: implementation in progress; stacked Draft PR; not merged.
+Status: implementation complete; quality gates passed on the preceding implementation commit; follow-up cleanup validation pending; stacked Draft PR; not merged.
 
 ## Objective
 Improve the public website's path from project discovery to a clear consultation action. Preserve the original Dzaroza Property business facts, service terms, prices, portfolio assets, and existing order workflow. Do not invent customer outcomes, ratings, certifications, guarantees, or product availability.
@@ -24,7 +24,8 @@ Improve the public website's path from project discovery to a clear consultation
 
 ## Validation
 - Changes are committed on `feat/phase-0.8-content-conversion`, based on Phase 0.7 head `4b6d286119d1767d29a0345e649e4227ec21d4d0`.
-- CI and Vercel Preview for this phase must complete before the implementation can be marked validated.
+- Implementation commit `d2a1f5d4a6e018e981ce57cc85c1ac7b74d9d75b`: GitHub Actions quality job passed all steps (frozen install, TypeScript, ESLint, unit tests, production build); Vercel Preview is READY at https://dzaroza-property-staging-ie74xifub-kholilmuflikhun-projects.vercel.app.
+- Follow-up cleanup commit removes unused imports from the conversion CTA; its CI and Preview validation are pending.
 - Browser visual QA and manual click-through remain pending; Preview readiness alone will not count as visual QA.
 
 ## Acceptance checks
@@ -33,7 +34,7 @@ Improve the public website's path from project discovery to a clear consultation
 3. WhatsApp CTA uses the existing official contact constant, prefilled with a generic consultation request, opens a new tab, and has an accessible label.
 4. Service intro explains the four existing service categories without changing commercial or akad terms.
 5. No unsupported proof claims or false product availability are introduced.
-6. Existing quality gates pass and the Vercel staging Preview is READY.
+6. Existing quality gates pass and the Vercel staging Preview is READY for the exact reviewed commit.
 7. Visual and manual interaction QA across desktop, tablet, iPad, and mobile is completed before release.
 
 ## Release safety
