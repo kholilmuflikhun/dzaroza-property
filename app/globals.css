@@ -4,12 +4,12 @@
   --color-orange-50: #FFF4ED;
   --color-orange-100: #FFE4D2;
   --color-orange-200: #FFC49C;
-  --color-orange-300: #FFA166;
-  --color-orange-400: #FB8B3D;
-  --color-orange: #EA580C;
-  --color-orange-500: #EA580C;
-  --color-orange-600: #D14E08;
-  --color-orange-700: #B34206;
+  --color-orange-300: #FDBA74;
+  --color-orange-400: #FB923C;
+  --color-orange: #F97316;
+  --color-orange-500: #F97316;
+  --color-orange-600: #EA580C;
+  --color-orange-700: #C2410C;
   --color-orange-800: #8A3305;
   --color-orange-900: #5C2203;
 
@@ -23,8 +23,8 @@
   --color-charcoal-950: #0A0A0B;
 
   --color-cream: #FFFFFF;
-  --color-cream-soft: #F7F6F4;
-  --color-cream-muted: #F0EFEC;
+  --color-cream-soft: #F8F8F8;
+  --color-cream-muted: #F1F1F1;
 
   --font-display: var(--font-plus-jakarta-sans), sans-serif;
   --font-body: var(--font-plus-jakarta-sans), sans-serif;
