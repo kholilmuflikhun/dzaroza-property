@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { href: "#layanan", label: "Layanan" },
   { href: "#portofolio", label: "Portofolio" },
   { href: "#testimoni", label: "Testimoni" },
-  { href: "#profil", label: "Company Profile" },
+  { href: "#profil", label: "Tentang Kami" },
   { href: "#faq", label: "FAQ" },
 ];
 
