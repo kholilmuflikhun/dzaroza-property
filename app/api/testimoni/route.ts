@@ -123,17 +123,15 @@ export async function POST(request: NextRequest) {
     const client = getSheetsClient();
 
     if (!client) {
-      // Kredensial belum diisi — beri respons jelas alih-alih gagal diam-diam.
-      console.warn(
-        "[api/testimoni] GOOGLE_SHEETS_* belum dikonfigurasi. Data tidak disimpan permanen."
-      );
+      // Fail closed: jangan menyatakan testimoni terkirim jika belum
+      // tersimpan secara persisten untuk ditinjau oleh tim.
+      console.warn("[api/testimoni] GOOGLE_SHEETS_* belum dikonfigurasi. Testimoni tidak disimpan.");
       return NextResponse.json(
         {
-          success: true,
-          message:
-            "Testimoni diterima (mode demo — belum tersambung ke Google Sheets). Isi GOOGLE_SHEETS_* di .env untuk mengaktifkan penyimpanan.",
+          success: false,
+          message: "Penyimpanan testimoni belum tersedia. Testimoni belum terkirim; silakan coba lagi nanti.",
         },
-        { status: 201 }
+        { status: 503 }
       );
     }
 
