@@ -287,17 +287,15 @@ export async function POST(request: NextRequest) {
     const client = getSheetsClient();
 
     if (!client) {
-      // Kredensial belum diisi — beri respons jelas alih-alih gagal diam-diam.
-      console.warn(
-        "[api/order] GOOGLE_SHEETS_* belum dikonfigurasi. Order tidak disimpan permanen."
-      );
+      // Fail closed: jangan pernah menyatakan pengajuan berhasil jika belum
+      // tersimpan secara persisten di Google Sheets.
+      console.warn("[api/order] GOOGLE_SHEETS_* belum dikonfigurasi. Order tidak disimpan.");
       return NextResponse.json(
         {
-          success: true,
-          message:
-            "Order diterima (mode demo — belum tersambung ke Google Sheets). Isi GOOGLE_SHEETS_* di .env untuk mengaktifkan penyimpanan.",
+          success: false,
+          message: "Penyimpanan pengajuan belum tersedia. Order belum terkirim; silakan hubungi tim melalui WhatsApp.",
         },
-        { status: 201 }
+        { status: 503 }
       );
     }
 

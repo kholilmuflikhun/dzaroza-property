@@ -20,7 +20,8 @@ export default function Services() {
       <div className="relative container-content">
         <SectionHeading
           eyebrow="Layanan Jasa"
-          title="Empat Kategori Layanan Utama Kami"
+          title="Pilih Pendampingan Properti Sesuai Kebutuhan Anda"
+          description="Mulai dari pembangunan baru, renovasi, hingga pemasaran tanah dan bangunan. Pelajari ruang lingkup tiap layanan, lalu konsultasikan kebutuhan Anda sebelum menentukan langkah."
           light
         />
 

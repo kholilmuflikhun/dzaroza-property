@@ -89,7 +89,7 @@ export default function Products() {
               if (event.key === "ArrowLeft" && canPrev) { event.preventDefault(); setPage(safePage - 1); }
               if (event.key === "ArrowRight" && canNext) { event.preventDefault(); setPage(safePage + 1); }
             }}
-            className="grid animate-carousel-enter touch-pan-y gap-5 select-none md:grid-cols-2 md:gap-6"
+            className="grid animate-carousel-enter touch-pan-y gap-5 select-none md:grid-cols-2 md:gap-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-4"
           >
             {currentItems.map((product) => {
               const Icon = ICONS[product.type] ?? Package;
@@ -165,7 +165,7 @@ export default function Products() {
                 onClick={() => canPrev && setPage(safePage - 1)}
                 disabled={!canPrev}
                 aria-label="Halaman produk sebelumnya"
-                className="absolute -left-5 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-charcoal-100 bg-white shadow-card transition-colors hover:border-orange-400 disabled:opacity-30 lg:flex"
+                className="absolute -left-5 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-charcoal-100 bg-white shadow-card transition-colors hover:border-orange-400 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 lg:flex"
               >
                 <ChevronLeft size={20} />
               </button>

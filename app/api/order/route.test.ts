@@ -57,7 +57,7 @@ describe("POST /api/order", () => {
     mocks.getSheetsClient.mockReturnValue(null);
   });
 
-  it("normalizes numeric and boolean detail values instead of rejecting or crashing", async () => {
+  it("validates numeric and boolean detail values but fails closed when persistent storage is unavailable", async () => {
     const payload = validPayload({
       fields: {
         lokasi: 123,
@@ -72,8 +72,11 @@ describe("POST /api/order", () => {
     const response = await POST(createRequest(payload));
     const body = await readJson(response);
 
-    expect(response.status).toBe(201);
-    expect(body.success).toBe(true);
+    expect(response.status).toBe(503);
+    expect(body.success).toBe(false);
+    expect(body.message).toContain("belum terkirim");
+    expect(mocks.getSheetsClient).toHaveBeenCalledOnce();
+    expect(mocks.append).not.toHaveBeenCalled();
   });
 
   it.each([

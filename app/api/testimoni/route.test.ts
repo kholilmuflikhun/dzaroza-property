@@ -69,6 +69,17 @@ describe("POST /api/testimoni identity and abuse controls", () => {
     expect(mocks.append).not.toHaveBeenCalled();
   });
 
+  it("fails closed when Google Sheets storage is unavailable", async () => {
+    mocks.getSheetsClient.mockReturnValue(null);
+    const response = await POST(request(payload()));
+    const body = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(body.success).toBe(false);
+    expect(body.message).toContain("belum terkirim");
+    expect(mocks.append).not.toHaveBeenCalled();
+  });
+
   it("stores the verified Google identity rather than caller-supplied identity fields", async () => {
     const response = await POST(request(payload({ name: "Nama Palsu" })));
     expect(response.status).toBe(201);

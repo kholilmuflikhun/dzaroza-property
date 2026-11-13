@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
 import Products from "@/components/Products";
 import Services from "@/components/Services";
+import ConversionCTA from "@/components/ConversionCTA";
 
 // Section di bawah layar (butuh scroll) dimuat belakangan, tidak ikut
 // menghambat render pertama (LCP) yang jadi tanggung jawab Hero di atas.
@@ -32,6 +33,7 @@ export default function HomePage() {
       <Products />
       <Services />
       <Portfolio />
+      <ConversionCTA />
       <Testimonials />
       <CompanyProfile />
       <FAQ />

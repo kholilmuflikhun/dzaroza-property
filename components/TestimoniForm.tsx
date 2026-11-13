@@ -72,8 +72,7 @@ export default function TestimoniForm() {
     <div className="rounded-xl2 border border-charcoal-100 bg-cream-soft p-6 sm:p-7">
       <h3 className="text-base font-bold text-charcoal-950">Bagikan Pengalaman Anda</h3>
       <p className="mt-1 text-sm text-charcoal-400">
-        Isi form di bawah untuk mengirim review. Login with Google bersifat opsional,
-        hanya untuk mengisi otomatis nama, email &amp; foto profil.
+        Untuk mengirim testimoni, Anda perlu login dengan akun Google agar identitas pengirim dapat diverifikasi. Nama dan email akan terisi otomatis.
       </p>
 
       {/* --- Login with Google: opsional --- */}
@@ -88,7 +87,7 @@ export default function TestimoniForm() {
         <button
           type="button"
           onClick={() => signIn("google")}
-          className="mt-5 inline-flex items-center gap-3 rounded-full border border-charcoal-200 bg-white px-5 py-3 text-sm font-semibold text-charcoal-800 hover:border-orange-500 hover:text-orange-700 transition-colors"
+          className="mt-5 inline-flex items-center gap-3 rounded-full border border-charcoal-200 bg-white px-5 py-3 text-sm font-semibold text-charcoal-800 hover:border-orange-500 hover:text-orange-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
         >
           <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
             <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.6 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
@@ -96,7 +95,7 @@ export default function TestimoniForm() {
             <path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.6C29.6 35 26.9 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5.1C9.6 39.6 16.3 44 24 44z"/>
             <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.6 5.6C39.9 37.4 44 31.8 44 24c0-1.3-.1-2.7-.4-3.5z"/>
           </svg>
-          Login with Google <span className="text-charcoal-400 font-normal">(opsional, isi otomatis)</span>
+          Login with Google <span className="text-charcoal-400 font-normal">(wajib untuk mengirim testimoni)</span>
         </button>
       )}
 
@@ -120,7 +119,7 @@ export default function TestimoniForm() {
           <button
             type="button"
             onClick={() => signOut()}
-            className="flex items-center gap-1 text-xs font-semibold text-charcoal-400 hover:text-orange-700"
+            className="flex items-center gap-1 rounded px-1 py-1 text-xs font-semibold text-charcoal-400 hover:text-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
           >
             <LogOut size={13} />
             Keluar
@@ -136,6 +135,8 @@ export default function TestimoniForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nama Lengkap"
+            aria-label="Nama lengkap"
+            autoComplete="name"
             className="w-full rounded-lg border border-charcoal-100 bg-white px-4 py-2.5 text-sm text-charcoal-950 placeholder:text-charcoal-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
           />
           <input
@@ -144,6 +145,8 @@ export default function TestimoniForm() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="No. HP (WhatsApp)"
+            aria-label="Nomor HP WhatsApp"
+            autoComplete="tel"
             className="w-full rounded-lg border border-charcoal-100 bg-white px-4 py-2.5 text-sm text-charcoal-950 placeholder:text-charcoal-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
           />
         </div>
@@ -155,6 +158,8 @@ export default function TestimoniForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
+            aria-label="Alamat email"
+            autoComplete="email"
             className="w-full rounded-lg border border-charcoal-100 bg-white px-4 py-2.5 text-sm text-charcoal-950 placeholder:text-charcoal-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
           />
           <input
@@ -162,11 +167,13 @@ export default function TestimoniForm() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Alamat"
+            aria-label="Alamat"
+            autoComplete="street-address"
             className="w-full rounded-lg border border-charcoal-100 bg-white px-4 py-2.5 text-sm text-charcoal-950 placeholder:text-charcoal-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
           />
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" role="group" aria-label="Rating pengalaman">
           {Array.from({ length: 5 }).map((_, i) => {
             const value = i + 1;
             return (
@@ -174,8 +181,9 @@ export default function TestimoniForm() {
                 key={value}
                 type="button"
                 onClick={() => setRating(value)}
-                aria-label={`Beri rating ${value}`}
-                className="p-0.5"
+                aria-label={`Beri rating ${value} dari 5`}
+                aria-pressed={rating === value}
+                className="rounded p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
               >
                 <Star
                   size={22}
@@ -191,21 +199,28 @@ export default function TestimoniForm() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Ceritakan pengalaman Anda menggunakan layanan Dzaroza Property..."
+          aria-label="Pengalaman menggunakan layanan Dzaroza Property"
           rows={3}
           className="w-full rounded-lg border border-charcoal-100 bg-white px-4 py-2.5 text-sm text-charcoal-950 placeholder:text-charcoal-400 resize-none focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
         />
 
+        {!session?.user && (
+          <p id="testimonial-login-help" className="text-xs text-charcoal-500">
+            Login dengan Google terlebih dahulu untuk mengaktifkan pengiriman testimoni.
+          </p>
+        )}
         <button
           type="submit"
-          disabled={status === "loading"}
-          className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-2.5 text-sm font-semibold text-charcoal-950 hover:bg-orange-400 transition-colors disabled:opacity-60"
+          disabled={!session?.user || status === "loading"}
+          aria-describedby={!session?.user ? "testimonial-login-help" : undefined}
+          className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-2.5 text-sm font-semibold text-charcoal-950 hover:bg-orange-400 transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
         >
           {status === "loading" ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
           Kirim Review
         </button>
 
         {feedback && (
-          <p className={`flex items-center gap-2 text-sm ${status === "success" ? "text-green-700" : "text-red-600"}`}>
+          <p role="status" aria-live="polite" className={`flex items-center gap-2 text-sm ${status === "success" ? "text-green-700" : "text-red-600"}`}>
             {status === "success" && <CheckCircle2 size={16} />}
             {feedback}
           </p>
