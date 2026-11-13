@@ -8,7 +8,15 @@ import { primaryWhatsApp, type ProductStatus } from "@/lib/data";
 import ComingSoonModal from "./ComingSoonModal";
 
 type Snap = {
-  pay: Function;
+  pay: (
+    token: string,
+    callbacks: {
+      onSuccess: () => void;
+      onPending: () => void;
+      onError: () => void;
+      onClose: () => void;
+    }
+  ) => void;
 };
 
 type Props = {
@@ -101,6 +109,7 @@ export default function PurchaseButton({
   return (
     <div className={className}>
       <button
+        type="button"
         onClick={handleClick}
         disabled={loading}
         className={`inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold transition-colors disabled:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 ${
