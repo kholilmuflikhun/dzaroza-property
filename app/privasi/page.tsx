@@ -3,6 +3,7 @@ import { contactEmail, primaryWhatsApp } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Kebijakan Privasi — Dzaroza Property",
+  alternates: { canonical: "/privasi" },
   robots: { index: true, follow: true },
 };
 
