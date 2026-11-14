@@ -65,10 +65,12 @@ export async function POST(request: NextRequest) {
 
     let form: FormData;
     try {
+      const uploadBuffer = new ArrayBuffer(boundedBody.bytes.byteLength);
+      new Uint8Array(uploadBuffer).set(boundedBody.bytes);
       const boundedRequest = new Request(request.url, {
         method: "POST",
         headers: request.headers,
-        body: new Blob([boundedBody.bytes]),
+        body: new Blob([uploadBuffer]),
       });
       form = await boundedRequest.formData();
     } catch {
