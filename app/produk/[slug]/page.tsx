@@ -53,9 +53,27 @@ export async function generateMetadata({
   const product = products.find((p) => p.slug === slug);
   if (!product) return { title: "Produk Tidak Ditemukan — Dzaroza Property" };
 
+  const title = `${product.title} — ${product.type} Dzaroza Property`;
+  const description = product.summary;
+  const url = `/produk/${product.slug}`;
+
   return {
-    title: `${product.title} — ${product.type} Dzaroza Property`,
-    description: product.summary,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+      images: [{ url: product.cover, alt: product.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [product.cover],
+    },
   };
 }
 
