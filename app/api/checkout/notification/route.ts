@@ -52,7 +52,10 @@ export async function POST(request: NextRequest) {
       );
     }
     const payload = parsedBody.value;
-    const { order_id, status_code, gross_amount, signature_key } = payload ?? {};
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      return NextResponse.json({ success: false, message: "Payload tidak valid." }, { status: 400 });
+    }
+    const { order_id, status_code, gross_amount, signature_key } = payload;
 
     if (
       typeof order_id !== "string" ||
