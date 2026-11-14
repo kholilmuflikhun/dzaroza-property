@@ -3,6 +3,7 @@ import { put } from "@vercel/blob";
 import { checkRateLimit, cleanupRateLimitEntries, getClientAddress } from "@/lib/rate-limit";
 import { isRedisConfigured } from "@/lib/redis";
 import { ORDER_PHOTO_MAX_BYTES } from "@/lib/orderForm";
+import { readBoundedBody } from "@/lib/request-body";
 
 // ---------------------------------------------------------------------------
 // app/api/order/upload/route.ts
@@ -54,12 +55,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const contentLength = Number(request.headers.get("content-length") ?? 0);
-    if (contentLength > ORDER_PHOTO_MAX_BYTES + 64 * 1024) {
-      return NextResponse.json({ success: false, message: "Ukuran foto maksimal 3 MB." }, { status: 413 });
+    const boundedBody = await readBoundedBody(request, ORDER_PHOTO_MAX_BYTES + 64 * 1024);
+    if (!boundedBody.ok) {
+      return NextResponse.json(
+        { success: false, message: boundedBody.status === 413 ? "Ukuran foto maksimal 3 MB." : boundedBody.message },
+        { status: boundedBody.status }
+      );
     }
 
-    const form = await request.formData();
+    let form: FormData;
+    try {
+      const boundedRequest = new Request(request.url, {
+        method: "POST",
+        headers: request.headers,
+        body: new Blob([boundedBody.bytes]),
+      });
+      form = await boundedRequest.formData();
+    } catch {
+      return NextResponse.json({ success: false, message: "Format unggahan tidak valid." }, { status: 400 });
+    }
     const file = form.get("file");
     if (!(file instanceof File)) {
       return NextResponse.json({ success: false, message: "File tidak ditemukan." }, { status: 400 });
