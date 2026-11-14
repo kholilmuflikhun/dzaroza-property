@@ -31,13 +31,15 @@
 - Add an explicit canonical URL for the homepage and privacy policy.
 - Add product-specific canonical URLs, Open Graph title/description/image metadata, and Twitter large-image metadata so product detail pages do not inherit generic homepage social previews.
 - Repair the Phase 0.9 quality-gate workflow triggers: include the Phase 0.9 push branch and the Phase 0.8 PR base branch. This ensures the branch's quality checks actually run for the stacked release PR.
+- Add a bounded streaming request-body reader and tests. Public order submission, order photo upload, checkout creation, and Midtrans notification now enforce hard byte limits while reading the stream; Content-Length is only an early-rejection hint and cannot bypass the streamed limit.
+- Give the privacy page its own description, Open Graph metadata, and Twitter metadata instead of inheriting the homepage social preview.
 
 ## Required verification before Phase 0.9 can be marked complete
 
 1. Run frozen dependency installation, typecheck, ESLint, unit tests, and production build on the exact final branch head. The workflow trigger repair is committed; the resulting run must complete successfully.
 2. Verify the deployed Preview returns the expected security headers on HTML, API error responses, and static assets.
 3. Validate `/robots.txt`, `/sitemap.xml`, canonical URLs, Open Graph metadata, and all product detail URLs.
-4. Run API regression tests for malformed JSON, oversized payloads, invalid service IDs, invalid upload signatures, missing Redis/Sheets/Blob configuration, and rate-limit exhaustion.
+4. Run API regression tests for malformed JSON, missing or misleading Content-Length, oversized streamed JSON/multipart payloads, invalid service IDs, invalid upload signatures, missing Redis/Sheets/Blob configuration, and rate-limit exhaustion.
 5. Review CSP violations and confirm every allowed external origin is required by the public website.
 6. Run Lighthouse on desktop and mobile; record LCP, INP, CLS, TTFB, and accessibility findings.
 7. Complete keyboard-only and screen-reader checks for navigation, conversion form, product dialog, portfolio lightbox, testimonial form, FAQ, and WhatsApp actions.
