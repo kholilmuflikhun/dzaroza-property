@@ -4,6 +4,7 @@ import { checkRateLimit, cleanupRateLimitEntries, getClientAddress } from "@/lib
 import { isRedisConfigured } from "@/lib/redis";
 import { orderFormFields, orderPhotoFields } from "@/lib/orderForm";
 import { services } from "@/lib/data";
+import { readBoundedJson } from "@/lib/request-body";
 
 // ---------------------------------------------------------------------------
 // app/api/order/route.ts
@@ -207,17 +208,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const contentLength = Number(request.headers.get("content-length") ?? 0);
-    if (contentLength > 32 * 1024) {
-      return NextResponse.json({ success: false, message: "Payload terlalu besar." }, { status: 413 });
+    const parsedBody = await readBoundedJson<unknown>(request, 32 * 1024);
+    if (!parsedBody.ok) {
+      return NextResponse.json(
+        { success: false, message: parsedBody.message },
+        { status: parsedBody.status }
+      );
     }
-
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return NextResponse.json({ success: false, message: "Format data tidak valid." }, { status: 400 });
-    }
+    const body = parsedBody.value;
 
     const bodyRecord = body && typeof body === "object" && !Array.isArray(body) ? (body as Record<string, unknown>) : null;
     if (!bodyRecord) {
