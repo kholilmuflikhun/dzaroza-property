@@ -23,6 +23,17 @@ describe("readBoundedBody", () => {
     expect(result).toMatchObject({ ok: false, status: 413 });
   });
 
+  it("rejects an oversized body even when Content-Length underreports it", async () => {
+    const request = new Request("https://example.test", {
+      method: "POST",
+      headers: { "content-length": "1" },
+      body: "x".repeat(33),
+    });
+
+    const result = await readBoundedBody(request, 32);
+    expect(result).toMatchObject({ ok: false, status: 413 });
+  });
+
   it("rejects an oversized declared Content-Length before reading", async () => {
     const request = new Request("https://example.test", {
       method: "POST",
