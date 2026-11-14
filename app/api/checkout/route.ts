@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import { products } from "@/lib/data";
 import { checkRateLimit, cleanupRateLimitEntries, getClientAddress } from "@/lib/rate-limit";
 import { isRedisConfigured, saveOrder, updateOrder, type Order } from "@/lib/redis";
+import { readBoundedJson } from "@/lib/request-body";
 
 // ---------------------------------------------------------------------------
 // app/api/checkout/route.ts
@@ -49,13 +50,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const contentLength = Number(request.headers.get("content-length") ?? 0);
-    if (contentLength > 16 * 1024) {
-      return NextResponse.json({ success: false, message: "Payload terlalu besar." }, { status: 413 });
+    const parsedBody = await readBoundedJson<unknown>(request, 16 * 1024);
+    if (!parsedBody.ok) {
+      return NextResponse.json(
+        { success: false, message: parsedBody.message },
+        { status: parsedBody.status }
+      );
     }
-
-    const body = await request.json();
-    const { slug, name, email, phone } = body ?? {};
+    const body = parsedBody.value;
+    const { slug, name, email, phone } =
+      body && typeof body === "object" && !Array.isArray(body)
+        ? body as Record<string, unknown>
+        : {};
 
     if (
       typeof slug !== "string" ||
