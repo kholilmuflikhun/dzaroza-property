@@ -116,7 +116,8 @@ describe("Midtrans notification webhook", () => {
     expect(response.status).toBe(200);
     expect(mocks.updateOrder).not.toHaveBeenCalled();
   });
-}  it.each([null, [], "unexpected", 42])("rejects non-object webhook payloads: %s", async (payload) => {
+
+  it.each([null, [], "unexpected", 42])("rejects non-object webhook payloads: %s", async (payload) => {
     const response = await POST(request(payload));
     expect(response.status).toBe(400);
     expect(mocks.getOrder).not.toHaveBeenCalled();
