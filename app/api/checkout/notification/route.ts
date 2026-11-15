@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { getOrder, isRedisConfigured, updateOrder, type OrderStatus } from "@/lib/redis";
+import { readBoundedJson } from "@/lib/request-body";
 
 // ---------------------------------------------------------------------------
 // app/api/checkout/notification/route.ts
@@ -43,8 +44,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: "Payment gateway belum dikonfigurasi." }, { status: 503 });
     }
 
-    const payload = await request.json();
-    const { order_id, status_code, gross_amount, signature_key } = payload ?? {};
+    const parsedBody = await readBoundedJson<Record<string, unknown>>(request, 16 * 1024);
+    if (!parsedBody.ok) {
+      return NextResponse.json(
+        { success: false, message: parsedBody.message },
+        { status: parsedBody.status }
+      );
+    }
+    const payload = parsedBody.value;
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      return NextResponse.json({ success: false, message: "Payload tidak valid." }, { status: 400 });
+    }
+    const { order_id, status_code, gross_amount, signature_key } = payload;
 
     if (
       typeof order_id !== "string" ||

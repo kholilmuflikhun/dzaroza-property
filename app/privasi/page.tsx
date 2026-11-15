@@ -3,6 +3,22 @@ import { contactEmail, primaryWhatsApp } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Kebijakan Privasi — Dzaroza Property",
+  description:
+    "Pelajari bagaimana Dzaroza Property mengumpulkan, menggunakan, menyimpan, dan melindungi data pribadi pengunjung serta pelanggan.",
+  alternates: { canonical: "/privasi" },
+  openGraph: {
+    title: "Kebijakan Privasi — Dzaroza Property",
+    description:
+      "Informasi pengumpulan, penggunaan, dan perlindungan data pribadi pengunjung serta pelanggan Dzaroza Property.",
+    url: "/privasi",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Kebijakan Privasi — Dzaroza Property",
+    description:
+      "Informasi pengumpulan, penggunaan, dan perlindungan data pribadi pengunjung serta pelanggan Dzaroza Property.",
+  },
   robots: { index: true, follow: true },
 };
 

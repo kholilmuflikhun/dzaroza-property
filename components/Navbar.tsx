@@ -65,8 +65,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {open && (
-        <div id="mobile-primary-navigation" className="border-t border-charcoal-100 bg-white px-5 pb-5 pt-3 shadow-card sm:px-8 xl:hidden">
+      <div id="mobile-primary-navigation" hidden={!open} className="border-t border-charcoal-100 bg-white px-5 pb-5 pt-3 shadow-card sm:px-8 xl:hidden">
           <div className="mx-auto grid max-w-content gap-1">
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href} onClick={(e) => handleAnchorClick(e, link.href)} className="flex min-h-12 items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-charcoal-800 transition-colors hover:bg-cream-soft hover:text-orange-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
@@ -78,8 +77,7 @@ export default function Navbar() {
               Konsultasi Layanan <ArrowUpRight size={16} />
             </a>
           </div>
-        </div>
-      )}
+      </div>
     </header>
   );
 }

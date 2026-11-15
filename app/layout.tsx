@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://dzarozaproperty.id"
   ),
+  alternates: { canonical: "/" },
   title: "Dzaroza Property — Jasa Managerial Property, Bangun dan Renovasi Amanah",
   description:
     "Dzaroza Property menyediakan jasa managerial property (bangun & renovasi) dengan akad cost and fee 10%, jasa titip-jual tanah dan bangunan, paket all-in bangun rumah dengan akad istishna, serta produk digital E-Book & E-Class — semua transparan tanpa gharar.",
@@ -82,7 +83,7 @@ export default function RootLayout({
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+                gtag('config', ${JSON.stringify(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID)});
               `}
             </Script>
           </>
