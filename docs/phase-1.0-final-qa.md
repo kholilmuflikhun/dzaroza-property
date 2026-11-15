@@ -3,7 +3,9 @@
 **Scope:** Public Dzaroza Property V4.0 website only  
 **Branch:** `feat/phase-0.9-security-seo-performance`  
 **Pull request:** [#4](https://github.com/kholilmuflikhun/dzaroza-property/pull/4) — Draft; not merged  
-**Latest QA baseline before this report:** `688e8ed59f213fa2c5d05ed2f730d088c15fc3ea`
+**QA commit verified:** `bd5652dd6c3cc69e465f114ac7854c12dd4342ba`  
+**Preview deployment:** [READY deployment](https://vercel.com/kholilmuflikhun-projects/dzaroza-property-staging/E3ZH8CJcr1eU6zYwxh7vwWYFgrXW)  
+**Preview URL:** https://dzaroza-property-staging-git-fe-fbc45d-kholilmuflikhun-projects.vercel.app
 
 ## Release guardrails
 
@@ -11,30 +13,66 @@
 - No Production deployment, DNS, platform secret, database, payment, or customer-impacting changes.
 - Keep PR #4 Draft and do not merge without explicit approval.
 - Preview checks must use synthetic/non-mutating requests only.
+- A READY deployment or passing CI is not UAT approval.
 
-## Verified on the Phase 0.9 Preview
+## Verified results on exact QA commit
 
-- GitHub Actions Push and Pull Request quality jobs passed on the baseline commit: frozen install, TypeScript, ESLint, unit tests, and production build.
-- Vercel Preview reached `READY`.
-- HTTP 200: `/`, `/privasi`, `/produk/e-book`, `/produk/e-class`, `/produk/webinar-property-syariah`, `/robots.txt`, and `/sitemap.xml`.
-- HTTP 405 for GET on POST-only API routes: `/api/order`, `/api/order/upload`, `/api/checkout`, and `/api/checkout/notification`. This confirms the GET method is not accepted; it does not replace safe POST contract tests.
-- Six response security headers present on checked HTML, text, XML, and API method-error responses: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and Permissions-Policy.
-- Homepage, privacy, and three product detail pages expose expected canonical URLs and route-specific Open Graph/Twitter titles.
-- Robots excludes `/admin/` and `/api/`; sitemap contains five canonical public URLs.
-- Static homepage anchor scan found no missing in-page targets or duplicate IDs.
-- Static review found mobile navigation's `aria-controls` target was absent while the menu was closed. Updated the component to keep the target mounted and use the native `hidden` attribute when closed.
+### CI and deployment
+
+- GitHub Actions Push quality job: **success**, run [43610453982](https://github.com/kholilmuflikhun/dzaroza-property/actions/runs/43610453982), job 132494184432.
+- GitHub Actions Pull Request quality job: **success**, run [43610458197](https://github.com/kholilmuflikhun/dzaroza-property/actions/runs/43610458197), job 132494197315.
+- Vercel deployment `dpl_E3ZH8CJcr1eU6zYwxh7vwWYFgrXW`: **READY**, exact Git SHA matches QA commit.
+- Vercel build events confirm frozen pnpm install, Next.js production compilation, and TypeScript phase completed. The CI jobs are the authoritative quality-gate success signal.
+
+### Source-level interaction and accessibility review
+
+- Mobile navigation now keeps `#mobile-primary-navigation` mounted while closed, applies the native `hidden` attribute, exposes `aria-expanded`, and supports Escape to close.
+- Main navigation includes in-page links for products, services, portfolio, testimonials, company profile, and FAQ; consultation CTA points to services.
+- Service section renders the consultation/order form component and service-specific consultation buttons.
+- Product carousel has responsive one/two-column behavior, pointer swipe, and keyboard arrow handling.
+- Portfolio provides category filters with `aria-pressed`, keyboard focus styling, swipe handling, and a lightbox trigger.
+- Testimonials fetch their display data from `/api/testimoni`; the component includes pause/reduced-motion state and a testimonial form. Runtime loading and submission were not exercised.
+- FAQ uses buttons with `aria-expanded` and `aria-controls`; its WhatsApp link opens a new tab with `rel="noopener noreferrer"`.
+- Conversion CTA provides an in-page consultation action and a WhatsApp action with an accessible label.
+- Order upload source enforces a bounded request body, 3 MB file limit, JPEG/PNG/WebP MIME and magic-byte validation, Redis-backed rate limit prerequisite, and Blob configuration prerequisite. These are source-review observations, not a live upload test.
+
+## Runtime verification attempt and limitations
+
+The following checks were attempted after confirming the exact Preview deployment:
+
+- Open Preview in the web retrieval environment: **blocked**; the Preview hostname was reported inaccessible.
+- Direct HTTPS request from the execution environment: **blocked before HTTP**, with DNS resolution failure (`Temporary failure in name resolution`).
+- Connected browser tab access: **unavailable** because the browser connector requires its originating browser context.
+
+Consequently, no honest runtime result can be reported for any of the following on this QA pass:
+
+| Requested check | Result |
+|---|---|
+| Browser rendering at 360px | Not run — browser access blocked |
+| Browser rendering at 768px | Not run — browser access blocked |
+| Browser rendering at 1366px | Not run — browser access blocked |
+| Browser rendering at 1920px | Not run — browser access blocked |
+| CTA, nav, form, upload, product, portfolio, testimonial, FAQ, WhatsApp interaction | Source reviewed; browser interaction not run |
+| Lighthouse desktop/mobile | Not run; no scores or Web Vitals claimed |
+| Deployed response security headers | Not re-verified on this exact commit |
+| Runtime CSP violations / external-origin allowlist | Not verified; requires browser network/console evidence |
+| Live robots, sitemap, canonical and OG metadata on this exact Preview | Not re-verified in this pass |
+| API contract POST cases | Not executed; no POST sent to avoid accidental mutation, storage writes, rate-limit consumption, or external integrations |
+
+Previously recorded HTTP/SEO/header checks were performed on an earlier Preview baseline and must not be represented as fresh verification of commit `bd5652d`.
 
 ## Remaining release gates
 
-1. Re-run CI and Vercel Preview against the updated Phase 1.0 head.
-2. Confirm all page assets and key local routes load in a real browser.
-3. Perform interaction QA at mobile (360px), tablet (768px), laptop (1366px), and desktop (1920px): menu, CTA, service form, upload validation, portfolio filters/lightbox, testimonials, FAQ, product flows, and WhatsApp links.
-4. Complete keyboard-only and screen-reader review, including menu expanded/collapsed state, dialogs, forms, carousel controls, and status announcements.
-5. Run Lighthouse on desktop and mobile and record LCP, INP, CLS, TTFB, and accessibility results. No Lighthouse score is claimed in this report.
-6. Review CSP allowlists against actual browser network requests and check for console CSP violations. Do not widen the policy without evidence.
-7. Run safe API contract tests for malformed/oversized payloads, missing configuration, invalid upload MIME/signatures, and rate limiting. Do not create live orders, payments, uploads, or customer messages.
-8. Obtain user acceptance before any Production release.
+1. Re-run browser QA on the exact Preview head at 360px, 768px, 1366px, and 1920px.
+2. Exercise menu, consultation CTA, service form validation, file validation using local invalid fixtures only, product flows, portfolio filters/lightbox, testimonial display/form validation, FAQ, and WhatsApp URL construction. Do not submit real customer data.
+3. Run Lighthouse desktop and mobile; record Performance, Accessibility, Best Practices, SEO, LCP, INP, CLS, and TTFB with the tested URL and timestamp.
+4. Verify response headers, robots, sitemap, canonical/social metadata, and CSP using actual Preview responses and browser network/console output.
+5. Add or run isolated API contract tests with mocked persistence, Blob, Redis, and payment clients. Cover malformed/oversized bodies, invalid MIME/signatures, missing configuration, and rate limiting without external side effects.
+6. Update this report with exact evidence and the resulting commit/Preview SHA.
+7. Obtain explicit user acceptance (UAT) before any Production release.
 
 ## Current release decision
 
-**NOT READY FOR PRODUCTION.** Source-level and HTTP checks are partially complete. Real-browser interaction, Lighthouse, accessibility, CSP runtime review, and UAT remain outstanding. Preview-only work continues; no Production resources have been changed.
+**NOT READY FOR PRODUCTION — Phase 1.0 remains OPEN.**
+
+CI and Preview deployment are green, and source-level checks were reviewed. Browser viewport/interaction QA, Lighthouse, deployed header/SEO/CSP verification, isolated API contract tests, and UAT remain outstanding because runtime access was unavailable in this execution context. No Production resources were changed and PR #4 remains Draft and unmerged.
