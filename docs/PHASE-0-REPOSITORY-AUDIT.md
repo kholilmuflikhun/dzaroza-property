@@ -60,3 +60,17 @@ The legacy source is read-only. Do not force-push, merge, rebase, deploy, or mod
 ## Asset preservation evidence
 
 The source snapshot at `apps/marketing/public/` and the previously prepared target branch at `public/` expose the same Git tree SHA: `19e0dcde78607e50e939b7ecae89aaf3ac11ca2a`. The rebuild branch reuses that exact tree object as `public/`. This preserves all tracked binary assets without downloading or re-encoding them. The 69-file / 362,893,177-byte count is from the prior Phase 0 execution record; the tree-hash equality independently confirms byte-identical Git blobs and paths.
+
+
+## Security audit follow-up — 2026-11-18
+
+The first blocking full-tree audit identified:
+- Zod GHSA-mrhx-c7xc-m3w5 (High): fixed by pinning the transitive resolution to Zod 4.6.7 through pnpm overrides. The upstream advisory states versions below 4.6.6 are affected.
+- Picomatch GHSA-fc5q-39xc-vjpf (High): remains in the development-tool dependency tree through `typescript-eslint → typescript-estree → tinyglobby → picomatch` and Vite/Vitest. The advisory currently lists affected versions through 4.0.7 and does not publish a patched version. It is not a production dependency. No unverified fork, fabricated patched version, or silent audit suppression will be used.
+
+CI policy is therefore split:
+1. Production dependency audit is blocking at High severity.
+2. Full dependency audit remains visible as a non-blocking review step while the upstream development-tool advisory has no published fix.
+3. The development advisory remains a Phase 0 risk item; it must be re-evaluated before production release and before enabling any untrusted glob input in build tooling.
+
+This is a transparent, scoped exception for a development-only transitive dependency, not a claim that the entire dependency tree is vulnerability-free.
