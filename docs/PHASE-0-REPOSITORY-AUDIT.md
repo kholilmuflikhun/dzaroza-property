@@ -21,7 +21,7 @@ Target repository: `kholilmuflikhun/dzaroza-property`
 - Prior package manifest used Next.js 16.4.3, React 19.3.1, Tailwind CSS 4.3.3, TypeScript 5.9.3, pnpm lockfile v9, and Node engine range >=22 <25.
 - Prior manifest named the app `@dzaroza/marketing` and did not include Framer Motion or Prisma despite their appearance in the website master prompt. These are explicit dependency gaps to resolve in later UI/data phases.
 - Existing source environment template includes Vercel Blob, upload secret, NextAuth v4, Google OAuth, Upstash Redis, Google Sheets, Midtrans, WhatsApp, and Analytics settings. No secret values are to be migrated.
-- Prior CI workflow uses pnpm 10.18.0 and Node 22 with frozen install, typecheck, lint, tests, and build.
+- Rebuild CI uses pnpm 10.18.0 and Node 22 with frozen install, high-severity dependency audit, typecheck, lint, tests, and build. A successful initial run is recorded; the new audit step is awaiting its run.
 
 ## Rebuild baseline decisions
 
@@ -39,10 +39,10 @@ Target repository: `kholilmuflikhun/dzaroza-property`
 - [x] Public asset count and aggregate size recorded from the existing execution record.
 - [x] Fresh standalone application scaffold committed to an isolated rebuild branch.
 - [x] Environment template contains placeholders only.
-- [x] CI quality workflow added; first GitHub Actions run remains the execution proof.
+- [x] CI quality workflow added with frozen install, high-severity dependency audit, typecheck, lint, tests, and production build.
 - [x] Preserve all 69 original public assets by reusing the exact Git tree from the pinned source snapshot; source and preserved target `public/` tree SHA: `19e0dcde78607e50e939b7ecae89aaf3ac11ca2a`. A separate per-file SHA-256 manifest remains a useful follow-up verification.
 - [ ] Review dependency vulnerabilities and Next.js compatibility after install.
-- [ ] Confirm CI green on the rebuild branch.
+- [x] Initial GitHub Actions quality run passed on the scaffold revision (install, typecheck, lint, tests, build).\n- [ ] Confirm the final branch head passes again after the dependency-audit gate was added.
 - [ ] Complete UAT/deployment boundary review (no Production release in Phase 0).
 
 ## Known dependency gaps and follow-up
