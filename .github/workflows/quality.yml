@@ -2,9 +2,9 @@ name: Website Quality Gates
 
 on:
   pull_request:
-    branches: [main]
-  push:
     branches: [main, "rebuild/**"]
+  push:
+    branches: [main, "rebuild/**", "feat/**"]
   workflow_dispatch:
 
 permissions:
