@@ -30,7 +30,7 @@ Target repository: `kholilmuflikhun/dzaroza-property`
 - Strict TypeScript, App Router, Tailwind CSS 4, and Lucide React foundation.
 - No production credentials, database data, DNS configuration, or deployment configuration copied into the rebuild branch.
 - Prisma/database, Auth.js, payment, storage, and Google integrations are introduced only with their respective implementation and test phases.
-- Legacy binary assets are not considered migrated until a Git-native transfer completes and SHA-256 checks pass.
+- Original binary assets have been preserved using the exact Git tree object from the pinned source snapshot; the `public/` tree hash matches source and target. This proves identical Git-tracked paths and blob objects. A separate SHA-256 manifest has not yet been generated.
 
 ## Current Phase 0 gates
 
@@ -40,7 +40,7 @@ Target repository: `kholilmuflikhun/dzaroza-property`
 - [x] Fresh standalone application scaffold committed to an isolated rebuild branch.
 - [x] Environment template contains placeholders only.
 - [x] CI quality workflow added; first GitHub Actions run remains the execution proof.
-- [ ] Transfer all 69 original public assets and verify SHA-256.
+- [x] Preserve all 69 original public assets by reusing the exact Git tree from the pinned source snapshot; source and preserved target `public/` tree SHA: `19e0dcde78607e50e939b7ecae89aaf3ac11ca2a`. A separate per-file SHA-256 manifest remains a useful follow-up verification.
 - [ ] Review dependency vulnerabilities and Next.js compatibility after install.
 - [ ] Confirm CI green on the rebuild branch.
 - [ ] Complete UAT/deployment boundary review (no Production release in Phase 0).
@@ -56,3 +56,7 @@ Target repository: `kholilmuflikhun/dzaroza-property`
 ## Safety
 
 The legacy source is read-only. Do not force-push, merge, rebase, deploy, or modify Production as part of Phase 0.
+
+## Asset preservation evidence
+
+The source snapshot at `apps/marketing/public/` and the previously prepared target branch at `public/` expose the same Git tree SHA: `19e0dcde78607e50e939b7ecae89aaf3ac11ca2a`. The rebuild branch reuses that exact tree object as `public/`. This preserves all tracked binary assets without downloading or re-encoding them. The 69-file / 362,893,177-byte count is from the prior Phase 0 execution record; the tree-hash equality independently confirms byte-identical Git blobs and paths.
