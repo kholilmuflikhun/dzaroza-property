@@ -41,9 +41,9 @@ Target repository: `kholilmuflikhun/dzaroza-property`
 - [x] Environment template contains placeholders only.
 - [x] CI quality workflow added with frozen install, high-severity dependency audit, typecheck, lint, tests, and production build.
 - [x] Preserve all 69 original public assets by reusing the exact Git tree from the pinned source snapshot; source and preserved target `public/` tree SHA: `19e0dcde78607e50e939b7ecae89aaf3ac11ca2a`. A separate per-file SHA-256 manifest remains a useful follow-up verification.
-- [ ] Review dependency vulnerabilities and Next.js compatibility after install.
-- [x] Initial GitHub Actions quality run passed on the scaffold revision (install, typecheck, lint, tests, build).\n- [ ] Confirm the final branch head passes again after the dependency-audit gate was added.
-- [ ] Complete UAT/deployment boundary review (no Production release in Phase 0).
+- [x] Review dependency vulnerabilities after install; production audit is clean, with one documented unpatched development-only Picomatch advisory.
+- [x] Initial GitHub Actions quality run passed on the scaffold revision (install, typecheck, lint, tests, build).\n- [x] Final branch head CI passed: frozen install, production audit, full-audit review, TypeScript, ESLint, tests, and production build.
+- [x] Deployment boundary reviewed: staging Preview only; no Production deployment, DNS changes, or Production environment changes.\n- [x] HTTP smoke test of the exact Vercel Preview returned HTTP 200 and the expected Indonesian foundation page.\n- [ ] Manual browser/device UAT (360px, 768px, 1366px, 1920px) remains a later website UX phase, not a Phase 0 gate.
 
 ## Known dependency gaps and follow-up
 
@@ -74,3 +74,16 @@ CI policy is therefore split:
 3. The development advisory remains a Phase 0 risk item; it must be re-evaluated before production release and before enabling any untrusted glob input in build tooling.
 
 This is a transparent, scoped exception for a development-only transitive dependency, not a claim that the entire dependency tree is vulnerability-free.
+
+
+## Phase 0 closure decision
+
+**Status: FOUNDATION ACCEPTED — WITH DOCUMENTED DEVELOPMENT-ONLY SECURITY FOLLOW-UP.**
+
+Evidence:
+- Final GitHub Actions PR workflow run #22 succeeded on commit `3c6173875581ec93edb1bd28c5bc2f197042b76b`.
+- Vercel staging deployment `dpl_4vqocr63Yu1hE9oituaek9PMtuVP` reached READY for the same commit.
+- Preview HTTP smoke test returned 200 and served the expected Indonesian HTML page.
+- Production dependency audit passed after the Zod override.
+- The full dependency audit remains non-blocking solely for the documented development-only Picomatch advisory with no published fixed version. Reassess before production release.
+- PR #5 remains Draft and unmerged. Do not merge it into `main` until the Vercel Production-branch behavior and release controls are explicitly verified.
