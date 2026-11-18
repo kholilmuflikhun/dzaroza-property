@@ -91,16 +91,16 @@ Keep the existing root-level App Router layout until a tested migration to `src/
 
 ## 6. Acceptance criteria
 
-- [ ] Runtime environment schema is typed and tested.
-- [ ] Public and server-only configuration cannot be confused or leaked.
-- [ ] API error/success contracts are consistent and tested.
-- [ ] Health endpoint responds without disclosing secrets.
-- [ ] Security headers are verified on Preview.
+- [x] Runtime environment schema is typed and tested.
+- [x] Public and server environment schemas are separate; server getter is isolated to server modules.
+- [x] API error/success contracts are consistent and tested.
+- [x] Health endpoint responds without disclosing secrets; Preview returned HTTP 200.
+- [x] Security headers verified on Preview: HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, COOP.
 - [ ] State-changing route protection and rate limiting policy are tested.
 - [ ] Logs redact credentials and sensitive payloads.
 - [ ] Integration adapters have mock-based tests and no UI-level SDK coupling.
-- [ ] CI passes on the final Phase 1 branch head.
-- [ ] Architecture decisions and operational runbooks are documented.
+- [x] CI passed on Phase 1 branch head `cb9c2e3c9867d5b0f2dcb9b51736583e83c01c80` (frozen install, production audit, full-audit review, typecheck, lint, tests, build).
+- [x] Architecture decisions documented in ADR-001 and ADR-002; operational runbooks remain open.
 
 ## 7. Decision log
 
@@ -112,3 +112,17 @@ Keep the existing root-level App Router layout until a tested migration to `src/
 | ADR-004 | Server-only integration adapters | Keep secrets and vendor SDKs away from client bundles |
 | ADR-005 | Zod 4 for runtime validation | Supported patched version for schema validation |
 
+
+
+## Phase 1 execution evidence — first infrastructure slice
+
+- Branch: `feat/phase-1-core-infrastructure`
+- Pull request: [#6](https://github.com/kholilmuflikhun/dzaroza-property/pull/6) (Draft; base is the Phase 0 foundation branch)
+- Validated commit: `cb9c2e3c9867d5b0f2dcb9b51736583e83c01c80`
+- GitHub Actions: passed on both push and pull-request runs.
+- Vercel Preview: `https://dzaroza-property-staging-oltoqiiia-kholilmuflikhun-projects.vercel.app`
+- `GET /`: HTTP 200; expected page title and Indonesian foundation content present.
+- `GET /api/health`: HTTP 200; status `ok`, `Cache-Control: no-store`.
+- Verified response headers: `strict-transport-security`, `x-frame-options`, `x-content-type-options`, `referrer-policy`, `permissions-policy`, `cross-origin-opener-policy`.
+
+This is the first infrastructure slice, not Phase 1 completion. Rate limiting, state-changing request protection, integration adapters, log redaction, and full operational runbooks remain in scope.
